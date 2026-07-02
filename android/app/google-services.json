@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "448137441165",
+    "project_id": "the-sixer-factory",
+    "storage_bucket": "the-sixer-factory.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:448137441165:android:609dd9d6470fb2a0ccd7c4",
+        "android_client_info": {
+          "package_name": "com.thesixerfactory.the_sixer_factory"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "448137441165-ijvhkvoo8sq4kvpfse2ie923ucaaik12.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.thesixerfactory.the_sixer_factory",
+            "certificate_hash": "7b28d04b308ed83a2403785c23e82ae83456abee"
+          }
+        },
+        {
+          "client_id": "448137441165-ga1cfh9fhj6oe37gj0qr4vdb5mrtr2c0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAEGsw3-iUsPoVAio-R_OWuAusmbjb2LQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "448137441165-ga1cfh9fhj6oe37gj0qr4vdb5mrtr2c0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
