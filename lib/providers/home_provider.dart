@@ -10,7 +10,7 @@ class HomeProvider extends ChangeNotifier {
     required HomeRepository homeRepository,
   }) : _homeRepository = homeRepository {
     loadHomeData();
-    startAutoRefresh();
+   // startAutoRefresh();
   }
 
   final HomeRepository _homeRepository;
@@ -53,7 +53,7 @@ class HomeProvider extends ChangeNotifier {
     _refreshTimer?.cancel();
 
     _refreshTimer = Timer.periodic(
-      const Duration(seconds: 30),
+      const Duration(seconds: 120),
           (timer) {
         loadHomeData();
       },

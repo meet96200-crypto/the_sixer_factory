@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+
+import '../screens/notifications/notification_screen.dart';
 import '../screens/search/search_screen.dart';
 
 class CustomAppBar extends StatelessWidget
     implements PreferredSizeWidget {
-
   const CustomAppBar({super.key});
 
   @override
@@ -47,12 +48,38 @@ class CustomAppBar extends StatelessWidget
           },
         ),
 
-        IconButton(
-          onPressed: () {},
-          icon: const Icon(
-            Icons.notifications_none,
-            color: Colors.white,
-          ),
+        Stack(
+          children: [
+
+            IconButton(
+              icon: const Icon(
+                Icons.notifications_none,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const NotificationScreen(),
+                  ),
+                );
+              },
+            ),
+
+            Positioned(
+              right: 10,
+              top: 10,
+              child: Container(
+                width: 10,
+                height: 10,
+                decoration: const BoxDecoration(
+                  color: Colors.red,
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+
+          ],
         ),
 
       ],
