@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/news_provider.dart';
 
 class BreakingNewsSlider extends StatelessWidget {
   const BreakingNewsSlider({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<NewsProvider>();
+    if (provider.news.isEmpty) {
+      return const SizedBox();
+    }
     return Container(
       height: 180,
       margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -18,25 +25,37 @@ class BreakingNewsSlider extends StatelessWidget {
           fit: StackFit.expand,
           children: [
             Image.network(
-              "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=900",
+              provider.news.first.imageUrl,
               fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  color: Colors.grey.shade800,
+                  child: const Center(
+                    child: Icon(
+                      Icons.image_not_supported,
+                      color: Colors.white,
+                      size: 40,
+                    ),
+                  ),
+                );
+              },
             ),
             Container(
               color: Colors.black45,
             ),
-            const Positioned(
-              bottom: 15,
-              left: 15,
-              right: 15,
-              child: Text(
-                "🔥 Virat Kohli scores brilliant century against Australia",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            )
+        Positioned(
+          bottom: 15,
+          left: 15,
+          right: 15,
+          child: Text(
+            "🔥 ${provider.news.first.title}",
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
           ],
         ),
       ),

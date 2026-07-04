@@ -19,10 +19,10 @@ class NewsCard extends StatelessWidget {
         }
 
         if (snapshot.hasError) {
-          return const Card(
-            child: Padding(
-              padding: EdgeInsets.all(20),
-              child: Text("Unable to load news"),
+          return const Center(
+            child: Text(
+              "Unable to load news",
+              style: TextStyle(color: Colors.white),
             ),
           );
         }
@@ -30,143 +30,126 @@ class NewsCard extends StatelessWidget {
         final news = snapshot.data ?? [];
 
         if (news.isEmpty) {
-          return const Card(
-            child: Padding(
-              padding: EdgeInsets.all(20),
-              child: Text("No News Available"),
+          return const Center(
+            child: Text(
+              "No News Available",
+              style: TextStyle(color: Colors.white),
             ),
           );
         }
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Latest Cricket News",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+        return ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: news.length > 5 ? 5 : news.length,
+          itemBuilder: (context, index) {
+            final article = news[index];
 
-            const SizedBox(height: 15),
-
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: news.length > 5 ? 5 : news.length,
-              itemBuilder: (context, index) {
-                final article = news[index];
-
-                return InkWell(
-                  borderRadius: BorderRadius.circular(16),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => NewsDetailsScreen(
-                          news: article,
-                        ),
-                      ),
-                    );
-                  },
-                  child: Card(
-                    color: const Color(0xff1E293B),
-                    margin: const EdgeInsets.only(bottom: 15),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    clipBehavior: Clip.antiAlias,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Image.network(
-                          article.image,
-                          height: 180,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                          errorBuilder: (_, _, _) => Container(
-                            height: 180,
-                            color: Colors.grey.shade800,
-                            child: const Center(
-                              child: Icon(
-                                Icons.image,
-                                color: Colors.white,
-                                size: 50,
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        Padding(
-                          padding: const EdgeInsets.all(14),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                article.title,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-
-                              const SizedBox(height: 8),
-
-                              Text(
-                                article.description.isEmpty
-                                    ? "No description available."
-                                    : article.description,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  color: Colors.white70,
-                                ),
-                              ),
-
-                              const SizedBox(height: 12),
-
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.public,
-                                    color: Colors.orange,
-                                    size: 18,
-                                  ),
-
-                                  const SizedBox(width: 6),
-
-                                  Expanded(
-                                    child: Text(
-                                      article.source,
-                                      style: const TextStyle(
-                                        color: Colors.orange,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-
-                                  const Icon(
-                                    Icons.arrow_forward_ios,
-                                    size: 15,
-                                    color: Colors.white70,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+            return InkWell(
+              borderRadius: BorderRadius.circular(18),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => NewsDetailsScreen(news: article),
                   ),
                 );
               },
-            ),
-          ],
+              child: Card(
+                color: const Color(0xff1E293B),
+                margin: const EdgeInsets.only(bottom: 18),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Image.network(
+                      article.imageUrl,
+                      height: 200,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) {
+                        return Container(
+                          height: 200,
+                          color: Colors.grey.shade800,
+                          child: const Center(
+                            child: Icon(
+                              Icons.image_not_supported,
+                              color: Colors.white,
+                              size: 50,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            article.title,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+
+                          const SizedBox(height: 10),
+
+                          Text(
+                            article.description,
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: Colors.white70,
+                              fontSize: 16,
+                            ),
+                          ),
+
+                          const SizedBox(height: 15),
+
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.category,
+                                color: Colors.orange,
+                                size: 18,
+                              ),
+
+                              const SizedBox(width: 8),
+
+                              Expanded(
+                                child: Text(
+                                  article.category,
+                                  style: const TextStyle(
+                                    color: Colors.orange,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+
+                              const Icon(
+                                Icons.arrow_forward_ios,
+                                color: Colors.white54,
+                                size: 16,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
         );
       },
     );

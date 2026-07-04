@@ -1,28 +1,94 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class NewsModel {
+  final String id;
   final String title;
-  final String image;
   final String description;
+
+  // Main Fields
+  final String imageUrl;
+  final String category;
+  final DateTime publishedAt;
+
+  // Compatibility Fields
+  final String image;
   final String source;
-  final String publishedAt;
   final String url;
 
-  NewsModel({
+  const NewsModel({
+    required this.id,
     required this.title,
-    required this.image,
     required this.description,
-    required this.source,
+    required this.imageUrl,
+    required this.category,
     required this.publishedAt,
-    required this.url,
+    this.image = '',
+    this.source = '',
+    this.url = '',
   });
 
-  factory NewsModel.fromJson(Map<String, dynamic> json) {
+  factory NewsModel.fromMap(Map<String, dynamic> map, String id) {
+    DateTime date;
+
+    final value = map['publishedAt'];
+
+    if (value is Timestamp) {
+      date = value.toDate();
+    } else {
+      date = DateTime.tryParse(value?.toString() ?? '') ?? DateTime.now();
+    }
+
     return NewsModel(
-      title: json["title"] ?? "",
-      image: json["urlToImage"] ?? "",
-      description: json["description"] ?? "",
-      source: json["source"]?["name"] ?? "",
-      publishedAt: json["publishedAt"] ?? "",
-      url: json["url"] ?? "",
+      id: id,
+      title: map['title'] ?? '',
+      description: map['description'] ?? '',
+      imageUrl: map['imageUrl'] ?? '',
+      category: map['category'] ?? '',
+      publishedAt: date,
+
+      // Compatibility
+      image: map['image'] ?? map['imageUrl'] ?? '',
+      source: map['source'] ?? '',
+      url: map['url'] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'title': title,
+      'description': description,
+      'imageUrl': imageUrl,
+      'category': category,
+      'publishedAt': Timestamp.fromDate(publishedAt),
+
+      // Compatibility
+      'image': image,
+      'source': source,
+      'url': url,
+    };
+  }
+
+  NewsModel copyWith({
+    String? id,
+    String? title,
+    String? description,
+    String? imageUrl,
+    String? category,
+    DateTime? publishedAt,
+    String? image,
+    String? source,
+    String? url,
+  }) {
+    return NewsModel(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      imageUrl: imageUrl ?? this.imageUrl,
+      category: category ?? this.category,
+      publishedAt: publishedAt ?? this.publishedAt,
+      image: image ?? this.image,
+      source: source ?? this.source,
+      url: url ?? this.url,
     );
   }
 }

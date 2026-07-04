@@ -1,29 +1,53 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../models/news_model.dart';
 
 class NewsService {
-  static const String apiKey = "1e1bd6f828e148629f4c178839d1324d";
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  static const String url =
-      "https://newsapi.org/v2/everything?q=cricket&language=en&sortBy=publishedAt&apiKey=$apiKey";
-
+  // Get All News
   Future<List<NewsModel>> getNews() async {
-    final response = await http.get(Uri.parse(url));
+    final snapshot = await _firestore
+        .collection('news')
+        .orderBy('publishedAt', descending: true)
+        .get();
 
-    if (response.statusCode == 200) {
-      final json = jsonDecode(response.body);
+    return snapshot.docs.map((doc) {
+      return NewsModel.fromMap(doc.data(), doc.id);
+    }).toList();
+  }
 
-      final List articles = json["articles"];
+  // Live Stream
+  Stream<List<NewsModel>> newsStream() {
+    return _firestore
+        .collection('news')
+        .orderBy('publishedAt', descending: true)
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs.map((doc) {
+        return NewsModel.fromMap(doc.data(), doc.id);
+      }).toList(),
+    );
+  }
 
-      return articles
-          .map((e) => NewsModel.fromJson(e))
-          .where((news) =>
-      news.title.isNotEmpty &&
-          news.image.isNotEmpty)
-          .toList();
-    } else {
-      throw Exception("Failed to load News");
-    }
+  // Add News
+  Future<void> addNews(NewsModel news) async {
+    await _firestore.collection('news').add(news.toMap());
+  }
+
+  // Update News
+  Future<void> updateNews(NewsModel news) async {
+    await _firestore
+        .collection('news')
+        .doc(news.id)
+        .update(news.toMap());
+  }
+
+  // Delete News
+  Future<void> deleteNews(String id) async {
+    await _firestore
+        .collection('news')
+        .doc(id)
+        .delete();
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../models/match_model.dart';
@@ -6,9 +8,13 @@ import '../repositories/home_repository.dart';
 class HomeProvider extends ChangeNotifier {
   HomeProvider({
     required HomeRepository homeRepository,
-  }) : _homeRepository = homeRepository;
+  }) : _homeRepository = homeRepository {
+    loadHomeData();
+    startAutoRefresh();
+  }
 
   final HomeRepository _homeRepository;
+  Timer? _refreshTimer;
 
   bool _isLoading = false;
   String _error = '';
@@ -42,5 +48,24 @@ class HomeProvider extends ChangeNotifier {
 
   Future<void> refresh() async {
     await loadHomeData();
+  }
+  void startAutoRefresh() {
+    _refreshTimer?.cancel();
+
+    _refreshTimer = Timer.periodic(
+      const Duration(seconds: 30),
+          (timer) {
+        loadHomeData();
+      },
+    );
+  }
+
+  void stopAutoRefresh() {
+    _refreshTimer?.cancel();
+  }
+  @override
+  void dispose() {
+    stopAutoRefresh();
+    super.dispose();
   }
 }

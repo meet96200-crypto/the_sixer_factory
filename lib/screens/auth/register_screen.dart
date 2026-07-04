@@ -78,10 +78,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
         uid: firebaseUser.uid,
         name: nameController.text.trim(),
         email: firebaseUser.email ?? emailController.text.trim(),
+
         photoUrl: "",
+
+        bio: "",
+        country: "",
+
         favoriteTeam: "",
         favoritePlayer: "",
+
         createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
       );
 
       await context.read<UserProvider>().saveUser(model);
