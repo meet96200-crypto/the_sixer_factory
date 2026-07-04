@@ -17,12 +17,16 @@ class ApiService {
         const Duration(seconds: 15),
       );
 
-
+      print(response.body);
       if (response.statusCode != 200) {
         throw Exception("Failed to load live matches");
       }
 
       final json = jsonDecode(response.body);
+
+      if (json["status"] == "failure") {
+        throw Exception(json["reason"]);
+      }
 
       if (json["data"] == null) {
         return [];
@@ -58,10 +62,13 @@ class ApiService {
 
       final json = jsonDecode(response.body);
 
+      if (json["status"] == "failure") {
+        throw Exception(json["reason"]);
+      }
+
       if (json["data"] == null) {
         return [];
       }
-
       final List matches = json["data"];
 
       return matches

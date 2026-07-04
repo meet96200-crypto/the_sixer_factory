@@ -13,5 +13,10 @@ class AppColors {
   static const Color white = Colors.white;
   static const Color grey = Colors.white70;
 
+  // ✅ Add these colors
+  static const Color textPrimary = Colors.white;
+  static const Color textSecondary = Colors.white70;
+  static const Color success = Colors.green;
+
   static const Color error = Colors.red;
 }

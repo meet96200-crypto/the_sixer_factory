@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../settings/settings_screen.dart';
 
 import '../../models/user_model.dart';
 import '../../providers/auth_provider.dart';
@@ -290,6 +291,21 @@ class _ProfileContent extends StatelessWidget {
           icon: const Icon(Icons.admin_panel_settings),
           label: const Text("Admin Panel"),
         ),
+
+        FilledButton.icon(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const SettingsScreen(),
+              ),
+            );
+          },
+          icon: const Icon(Icons.settings),
+          label: const Text("Settings"),
+        ),
+
+        const SizedBox(height: 12),
         const SizedBox(height: 12),
         OutlinedButton.icon(
           onPressed: isLoggingOut ? null : onLogout,

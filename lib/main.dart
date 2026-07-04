@@ -7,6 +7,7 @@ import 'app.dart';
 
 // Services
 import 'services/api_service.dart';
+import 'services/notification_service.dart';
 import 'services/auth_service.dart';
 import 'services/user_service.dart';
 import 'services/profile_service.dart';
@@ -38,7 +39,8 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
+  final notificationService = NotificationService();
+  await notificationService.initialize();
   runApp(
     MultiProvider(
       providers: [
@@ -70,6 +72,9 @@ Future<void> main() async {
         ),
         Provider<NewsService>(
           create: (_) => NewsService(),
+        ),
+        Provider<NotificationService>(
+          create: (_) => NotificationService(),
         ),
         // ==========================
         // REPOSITORIES
