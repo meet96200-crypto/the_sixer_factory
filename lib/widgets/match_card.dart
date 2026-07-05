@@ -32,17 +32,31 @@ class MatchCard extends StatelessWidget {
             children: [
 
               /// Series
+              /// Match Title
               Text(
-                match.series,
+                match.shortTitle,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                   color: Colors.orange,
                   fontWeight: FontWeight.bold,
-                  fontSize: 16,
+                  fontSize: 22,
                 ),
               ),
 
-              const SizedBox(height: 18),
+              const SizedBox(height: 6),
 
+              Text(
+                match.series,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  color: Colors.white70,
+                  fontSize: 14,
+                ),
+              ),
+
+              const SizedBox(height: 20),
               /// Teams
               Row(
                 children: [
@@ -76,7 +90,7 @@ class MatchCard extends StatelessWidget {
               ),
 
               const SizedBox(height: 18),
-
+              if (match.isLive || match.isFinished)
               Row(
                 children: [
 
@@ -104,7 +118,7 @@ class MatchCard extends StatelessWidget {
               ),
 
               const SizedBox(height: 10),
-
+              if (match.isLive)
               Row(
                 children: [
 
@@ -140,7 +154,7 @@ class MatchCard extends StatelessWidget {
 
                   Expanded(
                     child: Text(
-                      match.venue,
+                      match.displayVenue,
                       style: const TextStyle(
                         color: Colors.white70,
                       ),
@@ -148,10 +162,32 @@ class MatchCard extends StatelessWidget {
                   ),
                 ],
               ),
+              const SizedBox(height: 10),
+
+              Row(
+                children: [
+                  const Icon(
+                    Icons.calendar_month,
+                    color: Colors.white70,
+                    size: 18,
+                  ),
+
+                  const SizedBox(width: 8),
+
+                  Text(
+                    match.formattedDate,
+                    style: const TextStyle(
+                      color: Colors.white70,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
 
               const SizedBox(height: 18),
 
-              Row(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
 
                   Chip(
@@ -165,13 +201,17 @@ class MatchCard extends StatelessWidget {
                     ),
                   ),
 
-                  const Spacer(),
+                  const SizedBox(height: 10),
 
                   Text(
-                    match.status,
+                    match.displayStatus,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: match.matchStarted
+                      color: match.isFinished
                           ? Colors.greenAccent
+                          : match.isLive
+                          ? Colors.redAccent
                           : Colors.orange,
                       fontWeight: FontWeight.bold,
                     ),
@@ -204,6 +244,8 @@ class MatchCard extends StatelessWidget {
         Text(
           name,
           textAlign: TextAlign.center,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
           style: const TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,

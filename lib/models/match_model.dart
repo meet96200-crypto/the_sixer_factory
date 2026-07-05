@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class MatchModel {
   final String id;
   final String name;
@@ -57,7 +59,7 @@ class MatchModel {
     String team2Logo = "";
 
     if (json["teams"] != null && json["teams"] is List) {
-      if (json["teams"].length > 0) {
+      if (json["teams"].isNotEmpty) {
         team1 = json["teams"][0];
       }
 
@@ -70,7 +72,7 @@ class MatchModel {
         json["teamInfo"] is List) {
       final info = json["teamInfo"];
 
-      if (info.length > 0) {
+      if (info.isNotEmpty) {
         team1Logo = info[0]["img"] ?? "";
       }
 
@@ -85,21 +87,70 @@ class MatchModel {
       status: json["status"] ?? "",
       venue: json["venue"] ?? "",
       date: json["date"] ?? "",
-
       team1: team1,
       team2: team2,
-
       team1Logo: team1Logo,
       team2Logo: team2Logo,
-
       liveScore: score,
       overs: overs,
-
       matchType: json["matchType"] ?? "",
       series: json["name"] ?? "",
-
       matchStarted: json["matchStarted"] ?? false,
       matchEnded: json["matchEnded"] ?? false,
     );
+  }
+
+  // ---------------- Helpers ----------------
+
+  bool get isLive => matchStarted && !matchEnded;
+
+  bool get isUpcoming => !matchStarted;
+
+  bool get isFinished => matchEnded;
+
+  String get displayVenue {
+    if (venue.trim().isEmpty ||
+        venue.toLowerCase() == "tbc, tbc") {
+      return "Venue To Be Announced";
+    }
+    return venue;
+  }
+
+  String get displayScore {
+    if (liveScore.trim().isEmpty) {
+      return "Score Unavailable";
+    }
+    return liveScore;
+  }
+
+  String get displayOvers {
+    if (overs.trim().isEmpty) {
+      return "--";
+    }
+    return overs;
+  }
+
+  String get displayStatus {
+    if (isLive) return "LIVE";
+    if (isFinished) return status;
+    return "Upcoming";
+  }
+
+  String get shortTitle {
+    if (team1.isNotEmpty && team2.isNotEmpty) {
+      return "$team1 vs $team2";
+    }
+    return name;
+  }
+
+  String get formattedDate {
+    if (date.isEmpty) return "";
+
+    try {
+      final parsed = DateTime.parse(date);
+      return DateFormat("dd MMM yyyy").format(parsed);
+    } catch (_) {
+      return date;
+    }
   }
 }

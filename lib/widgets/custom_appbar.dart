@@ -13,19 +13,29 @@ class CustomAppBar extends StatelessWidget
       backgroundColor: const Color(0xff10141A),
       elevation: 0,
 
+      titleSpacing: 10,
+
       title: Row(
         children: [
+
           Image.asset(
             "assets/logos/logo.png",
-            width: 36,
-            height: 36,
+            width: 38,
+            height: 38,
           ),
+
           const SizedBox(width: 10),
-          const Text(
-            "The Sixer Factory",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+
+          const Expanded(
+            child: Text(
+              "The Sixer Factory",
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                fontSize: 20,
+              ),
             ),
           ),
         ],
@@ -34,6 +44,7 @@ class CustomAppBar extends StatelessWidget
       actions: [
 
         IconButton(
+          splashRadius: 22,
           icon: const Icon(
             Icons.search,
             color: Colors.white,
@@ -49,9 +60,11 @@ class CustomAppBar extends StatelessWidget
         ),
 
         Stack(
+          alignment: Alignment.center,
           children: [
 
             IconButton(
+              splashRadius: 22,
               icon: const Icon(
                 Icons.notifications_none,
                 color: Colors.white,
@@ -67,8 +80,8 @@ class CustomAppBar extends StatelessWidget
             ),
 
             Positioned(
-              right: 10,
               top: 10,
+              right: 10,
               child: Container(
                 width: 10,
                 height: 10,
@@ -78,10 +91,10 @@ class CustomAppBar extends StatelessWidget
                 ),
               ),
             ),
-
           ],
         ),
 
+        const SizedBox(width: 6),
       ],
     );
   }

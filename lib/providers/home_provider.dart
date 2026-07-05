@@ -36,8 +36,13 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      _liveMatches = await _homeRepository.getLiveMatches();
-      _upcomingMatches = await _homeRepository.getUpcomingMatches();
+      final results = await Future.wait([
+        _homeRepository.getLiveMatches(),
+        _homeRepository.getUpcomingMatches(),
+      ]);
+
+      _liveMatches = results[0];
+      _upcomingMatches = results[1];
     } catch (e) {
       _error = e.toString();
     }
