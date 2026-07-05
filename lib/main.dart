@@ -32,6 +32,7 @@ import 'providers/profile_provider.dart';
 import 'providers/search_provider.dart';
 import 'providers/favorite_provider.dart';
 import 'providers/news_provider.dart';
+import 'providers/match_details_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -140,6 +141,11 @@ Future<void> main() async {
         ChangeNotifierProvider<HomeProvider>(
           create: (context) => HomeProvider(
             homeRepository: context.read<HomeRepository>(),
+          ),
+        ),
+        ChangeNotifierProvider<MatchDetailsProvider>(
+          create: (context) => MatchDetailsProvider(
+            repository: context.read<HomeRepository>(),
           ),
         ),
         ChangeNotifierProvider<FavoriteProvider>(

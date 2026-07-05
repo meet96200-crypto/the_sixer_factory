@@ -36,4 +36,22 @@ class HomeRepository {
       return [];
     }
   }
+
+  // ==========================
+  // Match Details
+  // ==========================
+
+  Future<Map<String, dynamic>> getMatchDetails(
+      String matchId,
+      ) async {
+    try {
+      return await _apiService
+          .getMatchDetails(matchId)
+          .timeout(_timeout);
+    } on TimeoutException {
+      return {};
+    } catch (_) {
+      return {};
+    }
+  }
 }

@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
+import 'package:flutter/foundation.dart';
 import '../models/match_model.dart';
 
 class ApiService {
@@ -18,6 +18,7 @@ class ApiService {
       );
 
       print(response.body);
+
       if (response.statusCode != 200) {
         throw Exception("Failed to load live matches");
       }
@@ -36,9 +37,11 @@ class ApiService {
 
       return matches
           .map((e) => MatchModel.fromJson(e))
-          .where((match) =>
-      match.liveScore.isNotEmpty &&
-          match.status.isNotEmpty)
+          .where(
+            (match) =>
+        match.liveScore.isNotEmpty &&
+            match.status.isNotEmpty,
+      )
           .toList();
     } catch (e) {
       throw Exception("Unable to load live matches.\n$e");
@@ -55,7 +58,6 @@ class ApiService {
         const Duration(seconds: 15),
       );
 
-
       if (response.statusCode != 200) {
         throw Exception("Failed to load upcoming matches");
       }
@@ -69,6 +71,7 @@ class ApiService {
       if (json["data"] == null) {
         return [];
       }
+
       final List matches = json["data"];
 
       return matches
@@ -76,6 +79,34 @@ class ApiService {
           .toList();
     } catch (e) {
       throw Exception("Unable to load upcoming matches.\n$e");
+    }
+  }
+
+  Future<Map<String, dynamic>> getMatchDetails(String matchId) async {
+    try {
+      final url = Uri.parse(
+        "$baseUrl/match_info?apikey=$apiKey&id=$matchId",
+      );
+
+      final response = await http.get(url).timeout(
+        const Duration(seconds: 15),
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception("Failed to load match details");
+      }
+
+      final json = jsonDecode(response.body);
+      debugPrint("========== MATCH INFO API ==========");
+      debugPrint(response.body);
+      debugPrint("====================================");
+      if (json["status"] == "failure") {
+        throw Exception(json["reason"]);
+      }
+
+      return json["data"] ?? {};
+    } catch (e) {
+      throw Exception("Unable to load match details.\n$e");
     }
   }
 }
